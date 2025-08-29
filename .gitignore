@@ -1,0 +1,13 @@
+# System files
+.DS_Store
+
+# Environment
+.env
+node_modules/
+
+# External projects (prevent accidental commits)
+/aws-saa-code/
+/bot/
+/conference-booking-system/
+/token-bot/
+/interview/
