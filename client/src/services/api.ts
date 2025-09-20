@@ -64,6 +64,10 @@ export const tasksAPI = {
     const response = await api.get("/tasks/stats");
     return response.data.stats;
   },
+  getRecentTasks: async () => {
+    const response = await api.get("/tasks/recent");
+    return response.data.tasks;
+  },
 };
 
 export default api;
