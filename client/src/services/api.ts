@@ -3,7 +3,7 @@ import { Task, User } from "../types";
 
 // Create an Axios instance with default settings
 const api = axios.create({
-  baseURL: process.env.REACT_API_URL || "http://localhost:3001/api",
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:3001/api",
 });
 
 // Add a request interceptor to include the token in headers
@@ -34,7 +34,7 @@ export const authAPI = {
   },
   getProfile: async (): Promise<User> => {
     const response = await api.get("/auth/profile");
-    return response.data;
+    return response.data.user;
   },
 };
 
@@ -45,7 +45,7 @@ export const tasksAPI = {
     return response.data.tasks;
   },
   getTask: async (id: number) => {
-    const response = await api.get(`/task/${id}`);
+    const response = await api.get(`/tasks/${id}`);
     return response.data.task;
   },
   createTask: async (task: Partial<Task>) => {

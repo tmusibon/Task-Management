@@ -7,11 +7,17 @@ import {
   getTask,
   updateTask,
   deleteTask,
+  getTaskStats,
+  getRecentTasks,
 } from "../controllers/taskController";
 
 // Apply authentication middleware to all task routes
 const router = express.Router();
 router.use(authenticate);
+
+// Stats and recent must be before /:id
+router.get("/stats", getTaskStats);
+router.get("/recent", getRecentTasks);
 
 // Create a new task
 router.post(
@@ -21,7 +27,7 @@ router.post(
     body("description").optional().isString(),
     body("status")
       .optional()
-      .isIn(["pending", "in-progress", "completed"])
+      .isIn(["pending", "in_progress", "completed"])
       .withMessage("Invalid status"),
     body("priority")
       .optional()
@@ -50,7 +56,7 @@ router.put(
     body("description").optional().isString(),
     body("status")
       .optional()
-      .isIn(["pending", "in-progress", "completed"])
+      .isIn(["pending", "in_progress", "completed"])
       .withMessage("Invalid status"),
     body("priority")
       .optional()

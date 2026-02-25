@@ -24,9 +24,7 @@ export const register = async (req: Request, res: Response) => {
       username,
       email,
       password,
-      create_at: new Date(),
-      update_at: new Date(),
-    });
+    } as User);
 
     // Generate JWT token
     const token = jwt.sign(
@@ -109,7 +107,7 @@ export const getProfile = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.json({ user });
+    res.json({ user: user! });
   } catch (err) {
     console.error("Get profile error:", err);
     res.status(500).json({ message: "Server error" });

@@ -16,6 +16,12 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+// Request logging (helps debug in docker logs)
+app.use((req: Request, _res: Response, next: () => void) => {
+  console.log(`${new Date().toISOString()} ${req.method} ${req.path}`);
+  next();
+});
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
@@ -25,8 +31,8 @@ app.get("/", (req: Request, res: Response) => {
   res.send("TaskMaster API is running");
 });
 
-//Errors hnadling middleware
-app.use((err: any, req: Request, res: Response) => {
+// Error handling middleware (must have 4 args for Express to recognize it)
+app.use((err: any, req: Request, res: Response, _next: () => void) => {
   console.error(err.stack);
   res.status(500).json({
     message: "Something went wrong",

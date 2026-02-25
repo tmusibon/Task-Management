@@ -7,15 +7,15 @@ export interface User {
   username: string;
   email: string;
   password: string;
-  create_at: Date;
-  update_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface UserDTO {
   id: number;
   username: string;
   email: string;
-  create_at: Date;
+  created_at: Date;
 }
 
 export class UserModel {
@@ -31,7 +31,7 @@ export class UserModel {
     const query = `
     INSERT INTO users (username, email, password)
     VALUES ($1, $2, $3)
-    RETURNING id, username, email, create_at
+    RETURNING id, username, email, created_at
     `;
     const values = [user.username, user.email, hashedPassword];
     const result: QueryResult = await this.db.query(query, values);
@@ -48,7 +48,7 @@ export class UserModel {
 
   async findById(id: number): Promise<UserDTO | null> {
     const query = `
-    SELECT id , username, email, create_at FROM users WHERE id = $1
+    SELECT id, username, email, created_at FROM users WHERE id = $1
     `;
     const result: QueryResult = await this.db.query(query, [id]);
     return result.rows[0] || null;

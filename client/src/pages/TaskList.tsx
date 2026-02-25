@@ -4,7 +4,11 @@ import { tasksAPI } from "../services/api";
 import { Task } from "../types";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
-import { FaSort, FaFilter, FaPlus } from "react-icons/fa";
+import { FaSort, FaPlus } from "react-icons/fa";
+import { isOverdue } from "../utils/task";
+
+const IconSort = FaSort as React.ComponentType<Record<string, unknown>>;
+const IconPlus = FaPlus as React.ComponentType<Record<string, unknown>>;
 
 export const TaskList: React.FC = () => {
   const [filters, setFilters] = useState({
@@ -90,7 +94,7 @@ export const TaskList: React.FC = () => {
       <div className="page-header">
         <h1>Tasks</h1>
         <Link to="/tasks/new" className="btn-primary">
-          <FaPlus /> New Task
+          <IconPlus /> New Task
         </Link>
       </div>
 
@@ -132,16 +136,16 @@ export const TaskList: React.FC = () => {
             <thead>
               <tr>
                 <th onClick={() => handleSort("title")}>
-                  Title <FaSort />
+                  Title <IconSort />
                 </th>
                 <th onClick={() => handleSort("status")}>
-                  Status <FaSort />
+                  Status <IconSort />
                 </th>
                 <th onClick={() => handleSort("priority")}>
-                  Priority <FaSort />
+                  Priority <IconSort />
                 </th>
                 <th onClick={() => handleSort("due_date")}>
-                  Due Date <FaSort />
+                  Due Date <IconSort />
                 </th>
                 <th>Actions</th>
               </tr>
@@ -161,9 +165,16 @@ export const TaskList: React.FC = () => {
                     </span>
                   </td>
                   <td>
-                    {task.due_date
-                      ? format(new Date(task.due_date), "MMM dd, yyyy")
-                      : "No due date"}
+                    {task.due_date ? (
+                      <>
+                        {format(new Date(task.due_date), "MMM dd, yyyy")}
+                        {isOverdue(task) && (
+                          <span className="overdue-badge">Overdue</span>
+                        )}
+                      </>
+                    ) : (
+                      "No due date"
+                    )}
                   </td>
                   <td className="actions">
                     <Link to={`/tasks/${task.id}`} className="btn-view">

@@ -5,7 +5,7 @@ import { TaskModel, Task } from "../models/Task";
 export const createTask = async (req: Request, res: Response) => {
   // Validate request
   const errors = validationResult(req);
-  if (!errors.isEmpty) {
+  if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
   try {
@@ -139,6 +139,20 @@ export const getTaskStats = async (req: Request, res: Response) => {
     res.status(200).json({ stats });
   } catch (err) {
     console.error("Get task stats error", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getRecentTasks = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const limit = Math.min(parseInt(req.query.limit as string) || 5, 20);
+    const tasks = await new TaskModel().findRecent(req.user.id, limit);
+    res.status(200).json({ tasks });
+  } catch (err) {
+    console.error("Get recent tasks error", err);
     res.status(500).json({ message: "Server error" });
   }
 };

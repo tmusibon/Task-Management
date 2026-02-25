@@ -1,12 +1,8 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-export const Layaout: React.FC<LayoutProps> = ({ children }) => {
+export const Layout: React.FC = () => {
   const { state, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -39,7 +35,7 @@ export const Layaout: React.FC<LayoutProps> = ({ children }) => {
           )}
         </nav>
       </header>
-      <main className="app-main">{children}</main>
+      <main className="app-main"><Outlet /></main>
       <footer className="app-footer">
         <p>
           &copy; {new Date().getFullYear()} TaskMaster. All rights reserved.
@@ -49,4 +45,4 @@ export const Layaout: React.FC<LayoutProps> = ({ children }) => {
   );
 };
 
-export default Layaout;
+export default Layout;

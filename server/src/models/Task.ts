@@ -149,6 +149,19 @@ export class TaskModel {
     const result: QueryResult = await this.db.query(query, [userId]);
     return result.rows[0];
   }
+
+  async findRecent(userId: number, limit: number = 5): Promise<Task[]> {
+    const query = `
+      SELECT t.*, c.name as category_name
+      FROM tasks t
+      LEFT JOIN categories c ON t.category_id = c.id
+      WHERE t.user_id = $1
+      ORDER BY t.updated_at DESC, t.created_at DESC
+      LIMIT $2
+    `;
+    const result: QueryResult = await this.db.query(query, [userId, limit]);
+    return result.rows;
+  }
 }
 
 export default new TaskModel();

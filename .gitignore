@@ -5,6 +5,10 @@
 .env
 node_modules/
 
+# Build output
+server/dist/
+client/build/
+
 # External projects (prevent accidental commits)
 /aws-saa-code/
 /bot/
